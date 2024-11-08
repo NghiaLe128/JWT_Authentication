@@ -121,7 +121,7 @@ const getDetailsUser = (id)=>{
                 reject('The user is not defined');
             }
             resolve({
-                status: 'OK',
+                status: '200',
                 message: 'SUCCESS',
                 data: user
             })

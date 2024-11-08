@@ -20,12 +20,11 @@ const LoginPage = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:4000/api/user/login', {
+      const response = await axios.post('http://localhost:4000/user/login', {
         email,
         password,
       });
   
-      console.log("Response:", response); // Log full response
       if (response.status === 200) {
         const userId = response.data.user_id;
         const userName = response.data.user_name;  

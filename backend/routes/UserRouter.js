@@ -8,7 +8,7 @@ router.post('/login', userController.loginUser)
 
 router.put('/update-user/:id', userController.updateUser)
 
-router.get('/getDetails-user/:id', authMiddleware(), userController.getDetailsUser)
+router.get('/profile/:id', authMiddleware(), userController.getDetailsUser)
 
 router.post('/refresh-token', userController.refreshToken),
 
