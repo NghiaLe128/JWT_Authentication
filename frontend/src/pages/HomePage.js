@@ -15,7 +15,7 @@ const HomePage = () => {
   };
 
   const handleProfile = () => {
-    navigate("/profile");
+    navigate("/profile");  // Navigate to the profile page
     setIsDropdownOpen(false); // Close the dropdown when navigating to profile
   };
 
@@ -81,7 +81,6 @@ const HomePage = () => {
                     <FaSignInAlt className="mr-2" /> Login
                   </button>
                 </>
-
               )}
             </div>
           )}
@@ -91,7 +90,6 @@ const HomePage = () => {
       <h1 className="text-4xl font-bold text-center text-white">
         Welcome, <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-700 via-red-800 to-red-900">{userId ? userName : "Guest"}</span>!
       </h1>
-
 
       <div className="text-center space-y-2 text-white mt-6">
         <h2 className="text-2xl font-semibold">COURSE PROJECT</h2>
