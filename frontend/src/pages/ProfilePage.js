@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FaEnvelope, FaEdit, FaCalendarAlt } from "react-icons/fa";
+import { FaEnvelope, FaCalendarAlt, FaUser, FaLock, FaVenusMars } from "react-icons/fa";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -49,9 +49,7 @@ const ProFilePage = () => {
   }, [userId, token, loadProfileData]);
 
   return (
-    <div
-      className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-600 to-purple-600 p-6"
-    >
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-600 to-purple-600 p-6">
       {/* Alert for unauthenticated access */}
       {showAlert && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
@@ -105,23 +103,19 @@ const ProFilePage = () => {
               <p>Member Since: <span className="text-gray-600">{new Date(userCreatedAt).toLocaleDateString()}</span></p>
             </div>
 
-            {/* Display username, password, and gender */}
+            {/* Display username, password, and gender with icons */}
             <div className="flex items-center space-x-3 mb-4 text-gray-700">
+              <FaUser className="text-blue-500" />
               <p>Username: <span className="text-gray-600">{userName}</span></p>
             </div>
             <div className="flex items-center space-x-3 mb-4 text-gray-700">
+              <FaLock className="text-blue-500" />
               <p>Password: <span className="text-gray-600">************</span></p> {/* Mask password */}
             </div>
             <div className="flex items-center space-x-3 mb-4 text-gray-700">
-              <p>Gender: <span className="text-gray-600">{'Male'}</span></p>
+              <FaVenusMars className="text-blue-500" />
+              <p>Gender: <span className="text-gray-600">Male</span></p>
             </div>
-          </div>
-
-          <div className="px-6 pb-6 text-center">
-            <button className="px-5 py-2 text-white bg-gradient-to-r from-blue-500 to-purple-500 hover:from-purple-500 hover:to-blue-500 rounded-full shadow-lg transition duration-300 transform hover:scale-105 focus:outline-none">
-              <FaEdit className="inline mr-2" />
-              Edit Profile
-            </button>
           </div>
         </div>
       )}
