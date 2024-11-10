@@ -13,7 +13,6 @@ const RegisterPage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [errors, setErrors] = useState({})
   const navigate = useNavigate();
 
   
@@ -21,7 +20,7 @@ const RegisterPage = () => {
     e.preventDefault();
 
     try {
-        const response = await axios.post('http://localhost:4000/user/register', {
+        const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/user/register`, {
             username, email, password, confirmPassword
         });
         

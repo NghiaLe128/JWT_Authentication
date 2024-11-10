@@ -27,7 +27,7 @@ const ProFilePage = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/user/profile/${userId}`, {
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/user/profile/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
