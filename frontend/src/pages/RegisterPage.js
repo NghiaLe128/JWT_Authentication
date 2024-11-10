@@ -7,7 +7,7 @@ import axios from "axios";
 import Swal from 'sweetalert2';
 
 const RegisterPage = () => {
-  const [username, setUsername] = useState("");
+  const [username, setusername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -16,92 +16,32 @@ const RegisterPage = () => {
   const [errors, setErrors] = useState({})
   const navigate = useNavigate();
 
-  const validateInputs = () => {
-    const newErrors = {};
-
-    if (!username) {
-      newErrors.username = "Username is required";
-    } else if (username.length < 3 || username.length > 20) {
-      newErrors.username = "Username must be between 3 and 20 characters";
-    }
-
-    if (!email) {
-      newErrors.email = "Email is required";
-    } else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
-      newErrors.email = "Email must be a valid email address";
-    }
-
-    if (!password) {
-      newErrors.password = "Password is required";
-    } else if (password.length < 8 || password.length > 20) {
-      newErrors.password = "Password must be between 8 and 20 characters";
-    } else if (!/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)/.test(password)) {
-      newErrors.password = "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character";
-    }
-
-    if (password !== confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
+  
   const handleRegister = async (e) => {
     e.preventDefault();
-    
-    if (!validateInputs()) {
-      // If there are validation errors, show them in a SweetAlert
-      Swal.fire({
-        icon: 'error',
-        title: 'Validation Errors',
-        html: Object.values(errors).map(err => `<p>${err}</p>`).join(""),
-      });
-      return;
-    }
-  
+
     try {
-      const response = await  axios.post(`${process.env.REACT_APP_BACKEND_URL}/user/register`, {
-        username,
-        email,
-        password,
-      });
-  
-      if (response.status === 201) {
-        Swal.fire({
-          icon: 'success',
-          title: 'Registration Successful!',
-          text: 'You can now log in.',
-        }).then(() => {
-          navigate("/login");
+        const response = await axios.post('http://localhost:4000/user/register', {
+            username, email, password, confirmPassword
         });
-      }
-    } catch (error) {
-      let errorMessage = "An unknown error occurred.";
-      // if (error.response && error.response.data && error.response.data.message) {
-      //   errorMessage = error.response.data.message;
-      // }
-      if (error.response) {
-        console.error("Login error:", error.response.data);
-        const errorData = error.response.data;
-        if (errorData && errorData.message && errorData.message.message) {
-          errorMessage = errorData.message.message;
-        } else if (errorData && errorData.message) {
-          errorMessage = errorData.message;
+        
+        if (response.status === 200) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Registration Successful!',
+                text: 'You can now log in.',
+            }).then(() => navigate("/login"));
         }
-      } else {
-        console.error("Login error:", error.message);
-        errorMessage = error.message;
-      }
-  
-      Swal.fire({
-        icon: 'error',
-        title: 'Registration Failed',
-        text: errorMessage,
-      });
+    } catch (error) {
+        const errorMessage = error.response?.data?.message || 'An unknown error occurred.';
+        Swal.fire({
+            icon: 'error',
+            title: 'Registration Failed',
+            text: errorMessage,
+        });
     }
-  };
-  
+};
+
 
   return (
     <div
@@ -118,7 +58,7 @@ const RegisterPage = () => {
               type="text"
               placeholder=" "
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => setusername(e.target.value)}
               required
             />
             <Label text="Username" htmlFor="username" isRequired={true} />

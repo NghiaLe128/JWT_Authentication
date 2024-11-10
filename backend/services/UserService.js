@@ -9,36 +9,49 @@ const { generalAccessToken, generalRefreshToken } = require("./JwtService")
  */
 const createUser = (newUser) => {
     return new Promise(async (resolve, reject) => {
-        const { name, email, password } = newUser;
+        const { username, email, password } = newUser;
 
         try {
-            const checkUser = await User.findOne({ email: email });
-
-            if (checkUser !== null) {
-                reject('The email is already in use');
+            if (!username) {
+                return reject('username is required');
             }
 
+            const existingUserByEmail = await User.findOne({ email });
+            const existingUserByusername = await User.findOne({ username });
+
+            if (existingUserByEmail) {
+                return reject('The email is already in use');
+            }
+            if (existingUserByusername) {
+                return reject('The username is already in use');
+            }
+
+            // Hash the password
             const hash = bcrypt.hashSync(password, 10);
 
-            if (checkUser === null) {
-                const createUser = await User.create({
-                    name,
-                    email,
-                    password: hash,
+            // Create the user in the database
+            const newUser = await User.create({
+                username,
+                email,
+                password: hash,
+            });
+
+            if (newUser) {
+                resolve({
+                    status: '200',
+                    message: 'SUCCESS',
+                    data: newUser,
                 });
-                if (createUser) {
-                    resolve({
-                        status: 'OK',
-                        message: 'SUCCESS',
-                        data: createUser,
-                    });
-                }
+            } else {
+                reject('Failed to create user');
             }
         } catch (e) {
+            console.log("Error in createUser:", e); // Add this for debugging
             reject(e);
         }
     });
 };
+
 
 /**
  * Authenticate a user's credentials to log in
@@ -61,7 +74,7 @@ const loginUser = (userLogin) => {
             }
 
             const user_id = checkUser._id;
-            const user_name = checkUser.name
+            const user_name = checkUser.username
             const access_token = await generalAccessToken({ id: checkUser.id });
             const refresh_token = await generalRefreshToken({ id: checkUser.id });
 

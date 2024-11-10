@@ -3,19 +3,23 @@ const JwtService = require('../services/JwtService')
 
 const createUser = async (req, res) => {
     try {
-        const { name, email, password, confirmPassword, phone } = req.body;
+        const { username, email, password, confirmPassword } = req.body;
         const reg = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
         const isCheckEmail = reg.test(email);
 
-        if (!name && !email && !password && !confirmPassword && !phone) {
+        // Regular expression for password validation
+        const passwordReg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        const isValidPassword = passwordReg.test(password);
+
+        if (!username && !email && !password && !confirmPassword) {
             return res.status(404).json({
                 status: 'ERR',
                 message: 'Please input your information',
             });
-        } else if (!name) {
+        } else if (!username) {
             return res.status(404).json({
                 status: 'ERR',
-                message: 'Please input your name',
+                message: 'Please input your username',
             });
         } else if (!email) {
             return res.status(404).json({
@@ -32,6 +36,11 @@ const createUser = async (req, res) => {
                 status: 'ERR',
                 message: 'Email format is invalid. Please check the email and try again.',
             });
+        } else if (!isValidPassword) {
+            return res.status(404).json({
+                status: 'ERR',
+                message: 'Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a number, and a special character.',
+            });
         } else if (password !== confirmPassword) {
             return res.status(404).json({
                 status: 'ERR',
@@ -47,6 +56,7 @@ const createUser = async (req, res) => {
         });
     }
 };
+
 
 const loginUser= async(req,res)=>{
     try{
